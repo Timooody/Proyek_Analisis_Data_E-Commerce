@@ -1,0 +1,6 @@
+
+#Streamlite
+https://e-commerce-trend-analysis.streamlit.app/
+
+#Github 
+https://github.com/Timooody/Proyek_Analisis_Data_E-Commerce.git
