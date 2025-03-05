@@ -8,25 +8,26 @@ Dashboard untuk menganalisis dan menampilkan data menggunakan Streamlit.
 
 ### Menggunakan **Anaconda**
 ```bash
-# Membuat environment baru
+### Membuat environment baru
 conda create --name streamlitenv python=3.11
 
-# Mengaktifkan environment
+### Mengaktifkan environment
 conda activate streamlitenv
 
-# Menginstal dependensi
+## **Setup Environment - Shell/Terminal**
+###Menginstal dependensi
 pip install -r requirements.txt
-# Membuat direktori proyek
+###Membuat direktori proyek
 mkdir submission
 cd submission
 
-# Menginstal pipenv dan mengatur virtual environment
+### Menginstal pipenv dan mengatur virtual environment
 pipenv install
 pipenv shell
 
-# Menginstal dependensi
+### Menginstal dependensi
 pip install -r requirements.txt
 
-# ▶️ Menjalankan Streamlit App
+## ▶️ **Menjalankan Streamlit App**
 python -m streamlit run Dashboard.py
 
