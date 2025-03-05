@@ -13,24 +13,128 @@ orders_df = pd.read_csv('./Data/orders_dataset.csv')
 # Convert timestamps
 orders_df['order_purchase_timestamp'] = pd.to_datetime(orders_df['order_purchase_timestamp'])
 
-#Side Dashboard
+# Set Seaborn theme
+sns.set_theme(style="darkgrid", context="talk")
+
+# Custom CSS for sidebar styling
+st.markdown(
+    """
+    <style>
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background-color: #1F1F2E;
+        color: white;
+        border-radius: 15px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    /* Centering the profile image */
+    .profile-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    /* Circle image styling */
+    .profile-image img {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border: 4px solid #E63946;
+    }
+
+    /* Links styling */
+    a {
+        color: #FFFFFF;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #E63946;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 20px;
+    }
+
+    .social-icons a img {
+        width: 25px;
+        height: 25px;
+    }
+
+    /* Main content styling */
+    .main-content {
+        margin-top: 20px;
+    }
+
+    .section {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h3 {
+        color: #1F1F2E;
+    }
+
+    /* Date input styling */
+    input[type="date"] {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    /* Label styling for date picker */
+    label {
+        color: white !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Sidebar
 st.sidebar.title('📈 E-commerce Dashboard')
 st.sidebar.image("./Dashboard/foto.jpg",use_container_width=True)
-# Profil Developer
+#Profile Developer
+st.sidebar.markdown("## 👤 Developer Profile")
 st.sidebar.write("**Nama:** Zaenal Syamsyul Arief")
-st.sidebar.markdown("[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/zaenal-syamsyul-arief/)")
-st.sidebar.markdown("[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/zaenalSamsul)")
-    
-# ---- FOOTER ----
-st.sidebar.markdown(" " * 20)  # Spacer untuk mendorong footer ke bawah
-st.sidebar.markdown("---")
-st.sidebar.write("Developed by Zaenal Syamsyul Arief")
+st.sidebar.write("**Cohort ID:** MC535D5Y0390")
+
+st.sidebar.markdown(
+    """
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/zaenal-syamsyul-arief/" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+        </a>
+        <a href="https://github.com/zaenalSamsul" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
+        </a>
+        <a href="https://www.instagram.com/zaenalsa11_/" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+
 
 # Sidebar filters
 def sidebar_filters():
-    st.sidebar.header("Filter Data")
+    st.sidebar.header(" 🔍 Filter Data")
+    st.sidebar.write("Gunakan filter di bawah untuk menyesuaikan data:")
     start_date, end_date = st.sidebar.date_input(
-        "Pilih Rentang Tanggal", 
+        "📅 Pilih Rentang Tanggal", 
         [orders_df['order_purchase_timestamp'].min().date(), orders_df['order_purchase_timestamp'].max().date()],
         key="date_range",
     )
@@ -41,6 +145,10 @@ def filter_data(start_date, end_date):
     filtered_orders = orders_df[(orders_df['order_purchase_timestamp'] >= pd.Timestamp(start_date)) &
                                 (orders_df['order_purchase_timestamp'] <= pd.Timestamp(end_date))]
     return filtered_orders
+
+# Footer section
+st.sidebar.markdown("---")
+st.sidebar.write("\n\n\nDeveloped by Zaenal Syamsyul Arief")
 
 # Summary metrics
 def show_summary(filtered_orders):
@@ -58,8 +166,12 @@ def show_summary(filtered_orders):
     col5.metric("📍 Total Geolocations", f"{geolocation_df['geolocation_state'].nunique():,}")
 
 # Visualizations
+def show_visualizations(title, content_func):
+    st.markdown(f"<div class='section'><h3>{title}</h3>", unsafe_allow_html=True)
+    content_func()
+    st.markdown("</div>", unsafe_allow_html=True)
+
 def show_top_categories(filtered_orders):
-    st.header("Produk dan Kategori Terlaris")
     top_categories = products_df['product_category_name'].value_counts().head(10)
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(y=top_categories.index, x=top_categories.values, palette="viridis", ax=ax)
@@ -67,9 +179,8 @@ def show_top_categories(filtered_orders):
     ax.set_xlabel("Number of Sales")
     ax.set_ylabel("Product Category")
     st.pyplot(fig)
-
+    
 def show_customer_locations():
-    st.header("Wilayah Asal Pelanggan")
     customer_state_counts = customers_df['customer_state'].value_counts()
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x=customer_state_counts.index, y=customer_state_counts.values, palette="magma", ax=ax)
@@ -78,9 +189,10 @@ def show_customer_locations():
     ax.set_ylabel("Number of Customers")
     plt.xticks(rotation=45)
     st.pyplot(fig)
+    
+   
 
 def show_order_volume(filtered_orders):
-    st.header("Volume Pesanan Tertinggi")
     filtered_orders['month'] = filtered_orders['order_purchase_timestamp'].dt.month
     monthly_orders = filtered_orders['month'].value_counts().sort_index()
     
@@ -91,9 +203,8 @@ def show_order_volume(filtered_orders):
     ax.set_ylabel("Number of Orders")
     plt.xticks(range(12), ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], rotation=45)
     st.pyplot(fig)
-
+    
 def show_order_trends(filtered_orders):
-    st.header("Tren Pesanan")
     filtered_orders['week'] = filtered_orders['order_purchase_timestamp'].dt.to_period('W')
     weekly_orders = filtered_orders['week'].value_counts().sort_index()
     
@@ -104,9 +215,19 @@ def show_order_trends(filtered_orders):
     ax.set_ylabel("Number of Orders")
     ax.grid()
     st.pyplot(fig)
+    
+    
+    monthly_orders = filtered_orders['order_purchase_timestamp'].dt.to_period('M').value_counts().sort_index()
+    fig, ax = plt.subplots(figsize=(15, 6))
+    monthly_orders.plot(kind='line', marker='o', color='green', ax=ax)
+    ax.set_title("Monthly Order Trends")
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Number of Orders")
+    ax.grid()
+    st.pyplot(fig)
+
 
 def show_geolocation_distribution():
-    st.header("Distribusi Pesanan Berdasarkan Lokasi Geografis")
     geo_counts = geolocation_df['geolocation_state'].value_counts()
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(x=geo_counts.index, y=geo_counts.values, palette="coolwarm", ax=ax)
@@ -115,9 +236,9 @@ def show_geolocation_distribution():
     ax.set_ylabel("Number of Orders")
     plt.xticks(rotation=45)
     st.pyplot(fig)
+    
 
 def show_seasonal_patterns(filtered_orders):
-    st.header("Identifikasi Pola Musiman")
     filtered_orders['month'] = filtered_orders['order_purchase_timestamp'].dt.month
     monthly_orders = filtered_orders['month'].value_counts().sort_index()
     
@@ -131,7 +252,6 @@ def show_seasonal_patterns(filtered_orders):
     st.pyplot(fig)
 
 def detect_anomalies(filtered_orders):
-    st.header("Deteksi Anomali")
     filtered_orders['week'] = filtered_orders['order_purchase_timestamp'].dt.to_period('W')
     weekly_orders = filtered_orders['week'].value_counts().sort_index()
     
@@ -150,7 +270,6 @@ def detect_anomalies(filtered_orders):
     st.write("Anomali Mingguan:", anomalies)
 
 def show_yearly_trends(filtered_orders):
-    st.header("Visualisasi Data Tahun ke Tahun")
     if 'year' not in filtered_orders.columns:
         filtered_orders['year'] = filtered_orders['order_purchase_timestamp'].dt.year
 
@@ -170,21 +289,28 @@ def show_yearly_trends(filtered_orders):
 # Main app
 def main():
     st.title("📈 E-Commerce Dashboard")
+    st.markdown("---")
+    st.markdown(
+        """
+        Selamat datang di E-commerce Dashboard. Analisis ini memberikan wawasan tentang data penjualan, lokasi pelanggan, 
+        volume pesanan, dan tren pesanan dalam platform Anda.
+        """
+    )
+
     start_date, end_date = sidebar_filters()
     filtered_orders = filter_data(start_date, end_date)
 
     show_summary(filtered_orders)
-    show_top_categories(filtered_orders)
-    show_customer_locations()
-    show_order_volume(filtered_orders)
-    show_order_trends(filtered_orders)
-    show_geolocation_distribution()
-    show_seasonal_patterns(filtered_orders)
-    detect_anomalies(filtered_orders)
-    show_yearly_trends(filtered_orders)
-    
 
+    # Display visualizations with titles
+    show_visualizations("Produk dan Kategori Terlaris", lambda: show_top_categories(filtered_orders))
+    show_visualizations("Wilayah Asal Pelanggan", show_customer_locations)
+    show_visualizations("Volume Pesanan Tertinggi", lambda: show_order_volume(filtered_orders))
+    show_visualizations("Tren Pesanan", lambda: show_order_trends(filtered_orders))
+    show_visualizations("Distribusi Pesanan Berdasarkan Lokasi Geografis", show_geolocation_distribution)
+    show_visualizations("Identifikasi Pola Musiman", lambda: show_seasonal_patterns(filtered_orders))
+    show_visualizations("Deteksi Anomali", lambda: detect_anomalies(filtered_orders))
+    show_visualizations("Visualisasi Data Tahun ke Tahun", lambda: show_yearly_trends(filtered_orders))
 
 if __name__ == "__main__":
     main()
-
