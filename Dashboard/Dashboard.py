@@ -15,7 +15,7 @@ orders_df['order_purchase_timestamp'] = pd.to_datetime(orders_df['order_purchase
 
 #Side Dashboard
 st.sidebar.title('📈 E-commerce Dashboard')
-st.sidebar.image("foto.jpg",use_container_width=True)
+st.sidebar.image("foto.jpg",use_column_width=True)
 # Profil Developer
 st.sidebar.write("**Nama:** Zaenal Syamsyul Arief")
 st.sidebar.markdown("[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/zaenal-syamsyul-arief/)")
