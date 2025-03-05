@@ -1,4 +1,4 @@
-# E-Commerce Trend Analysis ✨
+# E-Commerce Trend Analysis 📊
 
 Dashboard untuk menganalisis dan menampilkan data menggunakan Streamlit. 
 
