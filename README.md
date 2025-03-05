@@ -13,8 +13,9 @@ conda create --name streamlitenv python=3.11
 
 ### Mengaktifkan environment
 conda activate streamlitenv
-
+```
 ## **Setup Environment - Shell/Terminal**
+``` bash
 ###Menginstal dependensi
 pip install -r requirements.txt
 ###Membuat direktori proyek
@@ -27,7 +28,7 @@ pipenv shell
 
 ### Menginstal dependensi
 pip install -r requirements.txt
-
+```
 ## ▶️ **Menjalankan Streamlit App**
 python -m streamlit run Dashboard.py
 
