@@ -4,11 +4,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load datasets
-products_df = pd.read_csv('D:\Submission\Data\products_dataset.csv')
-sellers_df = pd.read_csv('D:\Submission\Data\sellers_dataset.csv')
-customers_df = pd.read_csv('D:\Submission\Data\customers_dataset.csv')
-geolocation_df = pd.read_csv('D:\Submission\Data\geolocation_dataset.csv')
-orders_df = pd.read_csv('D:\Submission\Data\orders_dataset.csv')
+products_df = pd.read_csv('./Data/products_dataset.csv')
+sellers_df = pd.read_csv('./Data/sellers_dataset.csv')
+customers_df = pd.read_csv('/Data/customers_dataset.csv')
+geolocation_df = pd.read_csv('/Data/geolocation_dataset.csv')
+orders_df = pd.read_csv('./Data/orders_dataset.csv')
 
 # Convert timestamps
 orders_df['order_purchase_timestamp'] = pd.to_datetime(orders_df['order_purchase_timestamp'])
