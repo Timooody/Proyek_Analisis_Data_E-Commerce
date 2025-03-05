@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 # Load datasets
 products_df = pd.read_csv('./Data/products_dataset.csv')
 sellers_df = pd.read_csv('./Data/sellers_dataset.csv')
-customers_df = pd.read_csv('/Data/customers_dataset.csv')
-geolocation_df = pd.read_csv('/Data/geolocation_dataset.csv')
+customers_df = pd.read_csv('./Data/customers_dataset.csv')
+geolocation_df = pd.read_csv('./Data/geolocation_dataset.csv')
 orders_df = pd.read_csv('./Data/orders_dataset.csv')
 
 # Convert timestamps
